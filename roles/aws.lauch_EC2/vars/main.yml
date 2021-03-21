@@ -1,7 +1,7 @@
 ---
 # vars file for aws.lauch_EC2
 #
-my_aws_access_key: AKIA6NJETIRTDLEX7S6O
-my_aws_secret_key: wINowmxzFDTLUJDDEibiP+JoJmCclaxt/aS0CS1f
+my_aws_access_key: ---> enter your aws access key
+my_aws_secret_key:  ---> enter your aws access key
 load_balancer: lb-instance1
 web_servers: ws-instance1
