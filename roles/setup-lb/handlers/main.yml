@@ -1,0 +1,8 @@
+---
+# handlers file for setup-lb
+#
+#
+- name: "restart LB"
+  service:
+    name: "haproxy"
+    state: restarted

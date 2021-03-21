@@ -1,0 +1,30 @@
+---
+# tasks file for setup-lb
+#
+- name: Installing Reverse proxy software""
+  dnf:
+    name: "haproxy"
+    state: present
+- name: "Copying configuration file"
+  template:
+    src: "haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+  notify: "restart LB"
+
+- name: "Install firewalld"
+  dnf:
+    name: "firewalld"
+    state: present
+
+- name: "Start firewalld"
+  service:
+    name: "firewalld"
+    state: started
+    enabled: true
+
+- name: "allow LB port {{ service_port  }}"
+  firewalld:
+    port: "{{ service_port }}/tcp"
+    permanent: yes
+    immediate: yes
+    state: enabled

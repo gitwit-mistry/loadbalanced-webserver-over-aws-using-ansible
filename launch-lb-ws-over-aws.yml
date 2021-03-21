@@ -1,0 +1,13 @@
+---
+
+- hosts: localhost
+  roles:
+    - aws.lauch_EC2
+- hosts: webservers
+  roles: 
+    - setup-ws
+- hosts: loadbalancer
+  roles:
+    - setup-lb
+  
+

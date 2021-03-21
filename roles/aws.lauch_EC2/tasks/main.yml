@@ -1,0 +1,76 @@
+---
+# tasks file for aws.lauch_EC2
+#
+- name: Basic EC2 provisioning
+  amazon.aws.ec2:
+    key_name: latest_keypair
+    id: "{{ web_servers }}"
+    aws_access_key: "{{ my_aws_access_key }}"
+    aws_secret_key: "{{ my_aws_secret_key }}"
+    instance_type: t2.micro
+    image: ami-0a9d27a9f4f5c0efc
+    wait: yes
+    group: default
+    count: 3
+    region: ap-south-1
+    vpc_subnet_id: subnet-859198ed
+    assign_public_ip: yes
+    volumes:
+      - device_name: /dev/xvda
+        volume_type: gp2
+        volume_size: 10
+    instance_tags:
+            Name: webservers
+  register: ws_details
+  
+
+- name: Basic EC2 provisioning
+  amazon.aws.ec2:
+    key_name: latest_keypair
+    aws_access_key: "{{ my_aws_access_key }}"
+    aws_secret_key: "{{ my_aws_secret_key }}"
+    id: "{{ load_balancer }}"
+    instance_type: t2.micro
+    image: ami-0a9d27a9f4f5c0efc
+    wait: yes
+    group: default
+    count: 1
+    region: ap-south-1
+    vpc_subnet_id: subnet-859198ed
+    assign_public_ip: yes
+    volumes:
+      - device_name: /dev/xvda
+        volume_type: gp2
+        volume_size: 10
+    instance_tags:
+            Name: loadbalancer
+  register: lb_details
+
+- name: Getting the ip of loadbalancer
+  debug:
+    var: lb.instances[0].public_ip
+- name: Printng the info of ws-1
+  debug:
+    var: ws-details.instances[0].public_ip
+- name: Printng the info of ws-1
+  debug:
+    var: ws-details.instances[1].public_ip
+- name: Printng the info of ws-1
+  debug:
+    var: ws-details.instances[2].public_ip
+
+
+- name: Updating the inventory with master and worker node IPs
+  blockinfile:
+    path: inventory
+    content: |
+            [loadbalancer]
+            {{ lb_details.instances[0].public_ip }}  ansible_user=ec2-user
+            [webservers]
+            {{ ws_details.instances[0].public_ip }}   ansible_user=ec2-user
+            {{ ws_details.instances[1].public_ip }}   ansible_user=ec2-user
+            {{ ws_details.instances[2].public_ip }}   ansible_user=ec2-user
+
+- meta: refresh_inventory
+
+

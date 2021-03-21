@@ -1,0 +1,5 @@
+---
+# vars file for setup-lb
+#
+#
+service_port: 8080
