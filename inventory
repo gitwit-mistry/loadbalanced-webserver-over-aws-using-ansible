@@ -1,8 +1,1 @@
-# BEGIN ANSIBLE MANAGED BLOCK
-[loadbalancer]
-52.66.145.214  ansible_user=ec2-user
-[webservers]
-13.233.200.39   ansible_user=ec2-user
-15.206.145.146   ansible_user=ec2-user
-13.233.110.1   ansible_user=ec2-user
-# END ANSIBLE MANAGED BLOCK
+## This file will fill up dynamically
